@@ -7,7 +7,7 @@ import jQuery from 'jquery';
 //import a from 'op'
 import OtClient from '@opentok/client'
 
-  import ScreenShareAccPack from 'opentok-screen-sharing'
+import ScreenShareAccPack from 'opentok-screen-sharing'
 import AnnotationAccPack from 'opentok-annotation';
 import TextChatAccPack from 'opentok-text-chat';
 import { isParameter, formatDiagnosticsWithColorAndContext } from 'typescript';
@@ -35,6 +35,7 @@ export class MyComponent {
   publisherEl: HTMLElement;
   screenShareEl: HTMLElement;
   oneToOnePublisher: HTMLElement;
+  chatEl:  HTMLElement;
 
   session : OtClient.Session;
   oneToOneSession : OtClient.Session;
@@ -81,7 +82,7 @@ export class MyComponent {
       },
       limitCharacterMessage: 160,
       controlsContainer: '#feedControls',
-      textChatContainer: '#chatContainer',
+      textChatContainer: this.chatEl,
       alwaysOpen: true
      };
     const textChat = new TextChatAccPack(textChatOptions);
@@ -140,7 +141,7 @@ export class MyComponent {
     let publishOptions = { 
       session: this.session,
       extensionID: 'plocfffmbcclpdifaikiikgplfnepkpo',
-      annotation: false,
+      // annotation: true,
       externalWindow: true,
       dev: true,
       screenProperties: {
@@ -209,6 +210,8 @@ export class MyComponent {
   
   render() {
     return <div id="appVideoContainer" class="App-video-container">
+      <link rel="stylesheet" href="https://assets.tokbox.com/solutions/css/style.css"></link>
+
       <button onClick={() => {this.initiateSession('_jmcduffie')}}>Invite</button>
       <div id="videos">
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
@@ -216,7 +219,7 @@ export class MyComponent {
           <div ref={el => this.screenShareEl = el as HTMLElement}></div>
           <button onClick={()=>this.shareScreen()}>Screen Share</button>
           <div id="sub-screen-sharing-container"></div>
-          <div id="chat"></div>
+          <div id="chatContainer"  ref={el => this.chatEl = el as HTMLElement}></div>
         </div> 
       </div>;
   }

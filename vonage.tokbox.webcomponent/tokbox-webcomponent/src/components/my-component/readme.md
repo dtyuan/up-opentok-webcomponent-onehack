@@ -5,6 +5,19 @@
 <!-- Auto Generated Below -->
 
 
+## Methods
+
+### `initiateSession(targetUser: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Used by

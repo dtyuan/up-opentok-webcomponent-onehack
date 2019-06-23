@@ -9,9 +9,8 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {
-    'test': string;
-  }
+  interface MyComponent {}
+  interface TokboxLoader {}
 }
 
 declare global {
@@ -22,18 +21,25 @@ declare global {
     prototype: HTMLMyComponentElement;
     new (): HTMLMyComponentElement;
   };
+
+  interface HTMLTokboxLoaderElement extends Components.TokboxLoader, HTMLStencilElement {}
+  var HTMLTokboxLoaderElement: {
+    prototype: HTMLTokboxLoaderElement;
+    new (): HTMLTokboxLoaderElement;
+  };
   interface HTMLElementTagNameMap {
     'my-component': HTMLMyComponentElement;
+    'tokbox-loader': HTMLTokboxLoaderElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {
-    'test'?: string;
-  }
+  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {}
+  interface TokboxLoader extends JSXBase.HTMLAttributes<HTMLTokboxLoaderElement> {}
 
   interface IntrinsicElements {
     'my-component': MyComponent;
+    'tokbox-loader': TokboxLoader;
   }
 }
 

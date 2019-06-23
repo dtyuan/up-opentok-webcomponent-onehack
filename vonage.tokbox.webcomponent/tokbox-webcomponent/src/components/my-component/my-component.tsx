@@ -92,8 +92,11 @@ export class MyComponent {
 
   startAnnotation() {
     this.annotation = new AnnotationAccPack({
-      session: this.session,
-      screensharing : true
+      session: this.oneToOneSession,
+      absoluteParent: {
+        publisher: '.App-video-container',
+        subscriber: '.App-video-container'
+      }
     });
     this.annotation.start();
   }

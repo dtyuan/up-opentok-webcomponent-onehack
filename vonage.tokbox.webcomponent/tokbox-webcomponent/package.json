@@ -15,7 +15,7 @@
     "loader/"
   ],
   "scripts": {
-    "build-hack": "cp src/hack/opentok.js node_modules/@opentok/dist && cp src/hack/opentok-text-chat.js node_modules/opentok-text-chat/dist",
+    "build-hack": "cp src/hack/opentok.js node_modules/@opentok/dist && cp src/hack/opentok-text-chat.js node_modules/opentok-text-chat/dist && ([[ -f node_modules/opentok-text-chat/dist/opentok-text-chat.min.js ]] && rm node_modules/opentok-text-chat/dist/opentok-text-chat.min.js || true)",
     "build": "npm run build-hack; stencil build --docs",
     "start": "npm run build-hack; stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",

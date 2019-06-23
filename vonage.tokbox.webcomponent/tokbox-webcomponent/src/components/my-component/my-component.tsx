@@ -5,7 +5,7 @@ import jQuery from 'jquery';
 
 
 //import a from 'op'
-import OtClient from '@opentok/client'
+import OtClient, { SubscriberProperties } from '@opentok/client'
 
 import ScreenShareAccPack from 'opentok-screen-sharing'
 import AnnotationAccPack from 'opentok-annotation';
@@ -34,6 +34,7 @@ export class MyComponent {
   subscriberEl: HTMLElement;
   publisherEl: HTMLElement;
   screenShareEl: HTMLElement;
+  screenPublishEl: HTMLElement;
   oneToOnePublisher: HTMLElement;
   chatEl:  HTMLElement;
 
@@ -121,7 +122,7 @@ export class MyComponent {
               this.handleError(error);
             } else {
               const publisher = OT.initPublisher(this.publisherEl, {
-                insertMode: 'append',
+                insertMode: 'replace',
                 width: '100%',
                 height: '100%'
               }, this.handleError);
@@ -129,6 +130,9 @@ export class MyComponent {
               this.oneToOneSession.publish(publisher, this.handleError);
               this.initTextChat();
             }
+        });
+        this.oneToOneSession.on('streamCreated', (event) => {
+          this.oneToOneSession.subscribe(event.stream, this.screenPublishEl, { appendMode: 'append' } as SubscriberProperties);
         });
 
         // Process the event.data property, if there is any data.
@@ -139,7 +143,7 @@ export class MyComponent {
  
   shareScreen2 () {
     let publishOptions = { 
-      session: this.session,
+      session: this.oneToOneSession,
       extensionID: 'plocfffmbcclpdifaikiikgplfnepkpo',
       // annotation: true,
       externalWindow: true,
@@ -163,50 +167,11 @@ export class MyComponent {
     share.start();
   }
 
-
   shareScreen () { 
       console.log("something???",this);
       this.shareScreen2();
       return;
   }
-      // OT.checkScreenSharingCapability((response) => {
-      //     console.log('1 =========== response.supported = ', response.supported);
-      //     console.log('=========== response.extensionRegistered = ', response.extensionRegistered);
-      //   if(!response.supported || response.extensionRegistered === false) {
-      //     // This browser does not support screen sharing.
-      //     console.log(' ===== not support screen sharing');
-      //   } else if (response.extensionInstalled === false) {
-      //     // Prompt to install the extension.
-      //     console.log(' ===== extension needed');
-      //   } else {
-      //     // Screen sharing is available. Publish the screen.
-      //     let publishOptions = {} as any;
-      //     publishOptions.maxResolution = { width: 1920, height: 1080 };
-      //     publishOptions.videoSource = 'screen';
-      //     var screenPublisherElement = document.createElement('div');
-      //     var publisher = OT.initPublisher('screen-preview',
-      //     //var publisher = OT.initPublisher(screenPublisherElement,
-      //       publishOptions,
-      //       (error) => {
-      //         if (error) {
-      //           // Look at error.message to see what went wrong.
-      //           console.log('=========== error = ', error);
-      //         } else {
-      //           this.session.publish(publisher, function(error) {
-      //             if (error) {
-      //               // Look error.message to see what went wrong.
-      //               console.log('1=========== error = ', error);
-      //               return;
-      //             }
-      //             this.initAnnotations();
-      //           });
-      //         }
-      //       }
-      //     );
-      //   }
-      // });
-  //}
-
   
   render() {
     return <div id="appVideoContainer" class="App-video-container">
@@ -217,7 +182,7 @@ export class MyComponent {
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
           <div ref={el => this.screenShareEl = el as HTMLElement}></div>
-          <button onClick={()=>this.shareScreen()}>Screen Share</button>
+          <button onClick={() => {this.shareScreen();}}>Screen Share</button>
           <div id="sub-screen-sharing-container"></div>
           <div id="chatContainer"  ref={el => this.chatEl = el as HTMLElement}></div>
         </div> 

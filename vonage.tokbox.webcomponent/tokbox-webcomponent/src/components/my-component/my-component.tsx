@@ -22,6 +22,8 @@ const options = {
 export class MyComponent {
 
   @Prop() test: string;
+  subscriberEl: HTMLElement;
+  publisherEl: HTMLElement;
 
   session : OtClient.Session;
 
@@ -31,31 +33,35 @@ export class MyComponent {
     }
   }
  
-  publisher = OT.initPublisher('publisher', {
-    insertMode: 'append',
-    width: '100%',
-    height: '100%'
-  }, this.handleError);
 
   initAnnotations() {
     //OtAnnotation
   }
 
 
-  componentDidLoad() {
+  componentDidRender() {
       console.log("componentDidLoad");
       // var webSocket =  WebSocket;
       // console.log("componentDidLoad", webSocket);
       console.log("OT supported", OtClient.checkSystemRequirements());
 
+
+      console.log(this.publisherEl)
+      const publisher = OT.initPublisher(this.publisherEl, {
+        insertMode: 'append',
+        width: '100%',
+        height: '100%'
+      }, this.handleError);
+     
+
+      console.log('session ->');
       this.session = OtClient.initSession(options.credentials.apiKey, options.credentials.sessionId, {}); 
       console.log('init session ->');
-      const publisher = this.publisher;
       this.session.connect(options.credentials.token,(error)=>{
           if (error) {
             this.handleError(error);
           } else {
-            this.session.publish(this.publisher, this.handleError);
+            this.session.publish(publisher, this.handleError);
           }
       }
     );
@@ -65,7 +71,13 @@ export class MyComponent {
 
   
   render() {
-    return <div>We are here!!</div>;
+
+    return <div>We are here!! <div id="appVideoContainer" class="App-video-container"></div>
+      <div id="videos">
+          <div ref={el => this.subscriberEl = el as HTMLElement}></div>
+          <div ref={el => this.publisherEl = el as HTMLElement}></div>
+      </div> 
+    </div>;
   }
 
 

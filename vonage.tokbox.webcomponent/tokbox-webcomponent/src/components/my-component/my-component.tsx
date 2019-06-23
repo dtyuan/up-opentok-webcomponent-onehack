@@ -140,9 +140,16 @@ export class MyComponent {
             }
         });
         this.oneToOneSession.on('streamCreated', (event) => {
-          const element = document.createElement('div');
-          this.screenPublishEl.appendChild(element);
-          this.oneToOneSession.subscribe(event.stream, element, { appendMode: 'append' } as SubscriberProperties);
+          const options: SubscriberProperties = { insertMode: 'append', width: '100%', height: '100%' };
+          if(event.stream.videoType === 'screen') {
+            const element = document.createElement('div');
+            this.screenShareEl.appendChild(element);
+            this.oneToOneSession.subscribe(event.stream, element, options);
+          } else {
+            const element = document.createElement('div');
+            this.subscriberEl.appendChild(element);
+            this.oneToOneSession.subscribe(event.stream, element, options);
+          }
         });
 
         // Process the event.data property, if there is any data.
@@ -158,7 +165,7 @@ export class MyComponent {
       // annotation: true,
       externalWindow: true,
       dev: true,
-      screenSharingContainer: this.screenShareEl,
+      screenSharingContainer: this.screenPublishEl,
       screenProperties: {
         insertMode: 'append',
         width: '100%',
@@ -189,14 +196,13 @@ export class MyComponent {
   render() {
     return <div id="appVideoContainer" class="App-video-container">
       <link rel="stylesheet" href="https://assets.tokbox.com/solutions/css/style.css"></link>
-      <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
 
       <button onClick={() => {this.initiateSession('_jmcduffie')}}>Invite</button>
       <div id="videos">
-          <div ref={el => this.subscriberEl = el as HTMLElement}></div>
-          <div ref={el => this.publisherEl = el as HTMLElement}></div>
-          <div ref={el => this.screenShareEl = el as HTMLElement}></div>
-          <div ref={el => this.screenPublishEl = el as HTMLElement}></div>
+          <div id="subscriber" ref={el => this.subscriberEl = el as HTMLElement}></div>
+          <div id="publisher" ref={el => this.publisherEl = el as HTMLElement}></div>
+          <div id="screenShare" ref={el => this.screenShareEl = el as HTMLElement}></div>
+          <div id="screenPublish" ref={el => this.screenPublishEl = el as HTMLElement}></div>
           <button onClick={() => {this.shareScreen();}}>Screen Share</button>
           <button onClick={() => {this.startAnnotation();}}>Anonotation</button>
           <div id="sub-screen-sharing-container"></div>

@@ -1,3 +1,11 @@
 vonage.tokbox.webcomponent/tokbox-webcomponent/.editorconfig
 vonage.tokbox.webcomponent/tokbox-webcomponent/.gitignore
 components.d.ts
+vonage.tokbox.webcomponent/tokbox-webcomponent/.stencil
+node_modules
+dist
+www
+*.d.ts
+*.cjs.js
+*.mjs
+settings.json

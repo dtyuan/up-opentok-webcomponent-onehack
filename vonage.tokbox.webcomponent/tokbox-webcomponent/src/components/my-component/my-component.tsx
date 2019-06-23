@@ -148,6 +148,7 @@ export class MyComponent {
       // annotation: true,
       externalWindow: true,
       dev: true,
+      screenSharingContainer: this.screenShareEl,
       screenProperties: {
         insertMode: 'append',
         width: '100%',
@@ -182,6 +183,7 @@ export class MyComponent {
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
           <div ref={el => this.screenShareEl = el as HTMLElement}></div>
+          <div ref={el => this.screenPublishEl = el as HTMLElement}></div>
           <button onClick={() => {this.shareScreen();}}>Screen Share</button>
           <div id="sub-screen-sharing-container"></div>
           <div id="chatContainer"  ref={el => this.chatEl = el as HTMLElement}></div>

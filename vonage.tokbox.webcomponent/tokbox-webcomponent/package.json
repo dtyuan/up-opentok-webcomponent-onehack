@@ -38,15 +38,18 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@opentok/client": "^2.16.1",
     "body-parser": "^1.16.0",
     "express": "^4.14.1",
     "opentok-accelerator-core": "^2.0.15",
     "opentok-annotation": "*",
-    "opentok-solutions-logging": "*",
     "opentok-archiving": "*",
     "opentok-screen-sharing": ">=1.0.28",
     "opentok-solutions-css": "*",
+    "opentok-solutions-logging": "*",
     "opentok-text-chat": "*",
+    "sc-ws": "^1.0.2",
+    "socketcluster-client": "^14.2.2",
     "stencil": "0.0.5"
   }
 }

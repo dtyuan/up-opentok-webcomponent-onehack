@@ -11,19 +11,17 @@ export class MyComponent {
    * The first name
    */
   @Prop() test: string;
+  private videoContainer?: HTMLElement;
 
   componentDidLoad() {
-      console.log("componentDidRender");
       this.initVideo();
-    
   }
 
   private initVideo():void {
-    const videoContainerClass = `App-video-container  'center'`;
-    document.getElementById('appVideoContainer').setAttribute('class', videoContainerClass);
+    this.videoContainer.classList.add("App-video-container")
   }
  
   render() {
-    return <div>We are here! <div id="appVideoContainer"></div> </div>;
+    return <div>We are here! <div ref={el => this.videoContainer = el as HTMLElement}></div> </div>;
   }
 }

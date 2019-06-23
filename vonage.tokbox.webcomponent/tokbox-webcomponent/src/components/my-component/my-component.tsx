@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Prop, h, Method } from '@stencil/core';
 //import WebSocket from 'sc-ws';
 import jQuery from 'jquery';
 // export for others scripts to use
@@ -19,6 +19,9 @@ const options = {
   }
 };
 
+const sessionIdFor1To1 = "2_MX40NjM0NzA2Mn5-MTU2MTMwMzM4NzI0OX4xYkt2RDRJamVoU1g4ZWhnQWZ2MGZQenN-fg"
+const tokenFor1To1 = "T1==cGFydG5lcl9pZD00NjM0NzA2MiZzaWc9MzAwYmIyZWVhY2RhOWUyMTZjYjdmN2Y3N2U3NjI1NzZkMTQ4ZWEyYTpzZXNzaW9uX2lkPTJfTVg0ME5qTTBOekEyTW41LU1UVTJNVE13TXpNNE56STBPWDR4WWt0MlJEUkphbVZvVTFnNFpXaG5RV1oyTUdaUWVuTi1mZyZjcmVhdGVfdGltZT0xNTYxMzAzNDM3Jm5vbmNlPTAuMDc0NTQ1ODA3OTIzNjk2MDMmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTU2Mzg5NTQzNiZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
+
 @Component({
   tag: 'my-component',
   styleUrl: 'my-component.css',
@@ -28,8 +31,34 @@ export class MyComponent {
 
   subscriberEl: HTMLElement;
   publisherEl: HTMLElement;
+  screenShareEl: HTMLElement;
+  oneToOnePublisher: HTMLElement;
 
   session : OtClient.Session;
+  oneToOneSession : OtClient.Session;
+
+  @Method()
+  async initiateSession(targetUser){
+    if(!this.session) {
+      throw 'No Session Established'
+    }
+
+    this.session.signal(
+      {
+        data: JSON.stringify({ sessionIdFor1To1, tokenFor1To1}),
+        type: `invite-${targetUser}`
+      },
+      function(error) {
+        if (error) {
+          console.log("signal error ("
+                       + error.name
+                       + "): " + error.message);
+        } else {
+          console.log("signal sent.");
+        }
+      }
+    );
+  }
 
   annotation: AnnotationAccPack;
 
@@ -59,11 +88,6 @@ export class MyComponent {
 
 
       console.log(this.publisherEl)
-      const publisher = OT.initPublisher(this.publisherEl, {
-        insertMode: 'append',
-        width: '100%',
-        height: '100%'
-      }, this.handleError);
      
 
       console.log('session ->');
@@ -73,11 +97,32 @@ export class MyComponent {
           if (error) {
             this.handleError(error);
           } else {
-            this.session.publish(publisher, this.handleError);
+            // this.session.publish(publisher, this.handleError);
           }
-      }
-    );
-    this.initTextChat();
+      });
+
+      this.session.on("signal:invite-_jmcduffie" as "archiveStarted", (event: any) => {
+        console.log("Signal sent from connection " + event.from.id);
+        const { sessionIdFor1To1, tokenFor1To1 } = JSON.parse(event.data);
+        this.oneToOneSession = OtClient.initSession(options.credentials.apiKey, sessionIdFor1To1, {}); 
+        console.log('init session ->');
+        this.oneToOneSession.connect(tokenFor1To1, (error)=>{
+            if (error) {
+              this.handleError(error);
+            } else {
+              const publisher = OT.initPublisher(this.publisherEl, {
+                insertMode: 'append',
+                width: '100%',
+                height: '100%'
+              }, this.handleError);
+
+              this.oneToOneSession.publish(publisher, this.handleError);
+              this.initTextChat();
+            }
+        });
+
+        // Process the event.data property, if there is any data.
+      });
 
   }
 
@@ -97,8 +142,7 @@ export class MyComponent {
           publishOptions.maxResolution = { width: 1920, height: 1080 };
           publishOptions.videoSource = 'screen';
           var screenPublisherElement = document.createElement('div');
-          var publisher = OT.initPublisher('screen-preview',
-          //var publisher = OT.initPublisher(screenPublisherElement,
+          var publisher = OT.initPublisher(this.screenShareEl,
             publishOptions,
             (error) => {
               if (error) {
@@ -120,17 +164,17 @@ export class MyComponent {
 
   
   render() {
-
-    return <div>We are here!!
-      <div id="appVideoContainer" class="App-video-container"></div>
+    return <div id="appVideoContainer" class="App-video-container">
+      <button onClick={() => {this.initiateSession('_jmcduffie')}}>Invite</button>
       <div id="videos">
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
-           <div id="screen-preview"></div>
-           <button onClick={this.shareScreen}>Screen Share</button>
-           <div id="sub-screen-sharing-container"></div>
+          <div ref={el => this.screenShareEl = el as HTMLElement}></div>
+          <button onClick={this.shareScreen}>Screen Share</button>
+          <div id="sub-screen-sharing-container"></div>
           <div id="chat"></div>
-      </div> 
+        </div> 
+      </div>;
   }
 
 

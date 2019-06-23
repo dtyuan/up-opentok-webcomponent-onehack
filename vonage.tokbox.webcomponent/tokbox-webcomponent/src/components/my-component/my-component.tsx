@@ -90,7 +90,8 @@ export class MyComponent {
   }
 
   initAnnotations() {
-    // this.annotation = new AnnotationAccPack({});
+    this.annotation = new AnnotationAccPack({});
+    this.annotation.start();
   }
 
   componentDidRender() {

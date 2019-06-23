@@ -7,7 +7,7 @@ import jQuery from 'jquery';
 //import a from 'op'
 import OtClient from '@opentok/client'
 
-import ScreenShareAccPack from 'opentok-screen-sharing'
+  import ScreenShareAccPack from 'opentok-screen-sharing'
 import AnnotationAccPack from 'opentok-annotation';
 import TextChatAccPack from 'opentok-text-chat';
 import { isParameter } from 'typescript';
@@ -41,9 +41,7 @@ export class MyComponent {
     }
   }
   
-  initScreenshare() {
-
-  }
+  
 
   initTextChat() {
     const textChatOptions = {
@@ -61,14 +59,10 @@ export class MyComponent {
   }
 
   initAnnotations() {
-    jQuery.isWindow({});
-    //jQuery("#chat")css();
-    // console.log("initAnnotations");
     // this.annotation = new AnnotationAccPack({});
   }
 
-
-  componentDidLoad() {
+  componentDidRender() {
       console.log("componentDidLoad");
       console.log("OT supported", OtClient.checkSystemRequirements());
 
@@ -90,49 +84,82 @@ export class MyComponent {
           } else {
             this.session.publish(publisher, this.handleError);
             this.initTextChat();
-
           }
       }
     );
 
   }
-
-  shareScreen () {
-      OT.checkScreenSharingCapability((response) => {
-          console.log('1 =========== response.supported = ', response.supported);
-          console.log('=========== response.extensionRegistered = ', response.extensionRegistered);
-        if(!response.supported || response.extensionRegistered === false) {
-          // This browser does not support screen sharing.
-          console.log(' ===== not support screen sharing');
-        } else if (response.extensionInstalled === false) {
-          // Prompt to install the extension.
-          console.log(' ===== extension needed');
-        } else {
-          // Screen sharing is available. Publish the screen.
-          let publishOptions = {} as any;
-          publishOptions.maxResolution = { width: 1920, height: 1080 };
-          publishOptions.videoSource = 'screen';
-          var screenPublisherElement = document.createElement('div');
-          var publisher = OT.initPublisher('screen-preview',
-          //var publisher = OT.initPublisher(screenPublisherElement,
-            publishOptions,
-            (error) => {
-              if (error) {
-                // Look at error.message to see what went wrong.
-                console.log('=========== error = ', error);
-              } else {
-                this.session.publish(publisher, function(error) {
-                  if (error) {
-                    // Look error.message to see what went wrong.
-                    console.log('1=========== error = ', error);
-                  }
-                });
-              }
-            }
-          );
-        }
-      });
+ 
+ 
+  shareScreen2 () {
+    let publishOptions = { 
+      session: this.session,
+      extensionID: 'plocfffmbcclpdifaikiikgplfnepkpo',
+      annotation: true,
+      externalWindow: true,
+      dev: true,
+      screenProperties: {
+        insertMode: 'append',
+        width: '100%',
+        height: '100%',
+        showControls: true,
+        style: {
+          buttonDisplayMode: 'true',
+        },
+        videoSource: 'screen',
+        fitMode: 'contain' // Using default
+      }
+    }
+    // let publishOptions = {} as any;
+    // publishOptions.maxResolution = { width: 1920, height: 1080 };
+    // publishOptions.videoSource = 'screen';
+    var share = new ScreenShareAccPack(publishOptions);
+    share.start();
   }
+
+
+  shareScreen () { 
+      console.log("something???",this);
+      this.shareScreen2();
+      return;
+  }
+      // OT.checkScreenSharingCapability((response) => {
+      //     console.log('1 =========== response.supported = ', response.supported);
+      //     console.log('=========== response.extensionRegistered = ', response.extensionRegistered);
+      //   if(!response.supported || response.extensionRegistered === false) {
+      //     // This browser does not support screen sharing.
+      //     console.log(' ===== not support screen sharing');
+      //   } else if (response.extensionInstalled === false) {
+      //     // Prompt to install the extension.
+      //     console.log(' ===== extension needed');
+      //   } else {
+      //     // Screen sharing is available. Publish the screen.
+      //     let publishOptions = {} as any;
+      //     publishOptions.maxResolution = { width: 1920, height: 1080 };
+      //     publishOptions.videoSource = 'screen';
+      //     var screenPublisherElement = document.createElement('div');
+      //     var publisher = OT.initPublisher('screen-preview',
+      //     //var publisher = OT.initPublisher(screenPublisherElement,
+      //       publishOptions,
+      //       (error) => {
+      //         if (error) {
+      //           // Look at error.message to see what went wrong.
+      //           console.log('=========== error = ', error);
+      //         } else {
+      //           this.session.publish(publisher, function(error) {
+      //             if (error) {
+      //               // Look error.message to see what went wrong.
+      //               console.log('1=========== error = ', error);
+      //               return;
+      //             }
+      //             this.initAnnotations();
+      //           });
+      //         }
+      //       }
+      //     );
+      //   }
+      // });
+  //}
 
   
   render() {
@@ -143,8 +170,8 @@ export class MyComponent {
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
            <div id="screen-preview"></div>
-           <button onClick={this.shareScreen}>Screen Share</button>
-           <div id="sub-screen-sharing-container"></div>
+           <button onClick={()=>this.shareScreen()}>Screen Share</button>
+           {/* <div id="sub-screen-sharing-container"></div> */}
           <div id="chat"></div>
       </div> 
       </div>

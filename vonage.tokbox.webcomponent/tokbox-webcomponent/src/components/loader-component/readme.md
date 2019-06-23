@@ -1,4 +1,4 @@
-# my-component
+# tokbox-loader
 
 
 
@@ -7,15 +7,15 @@
 
 ## Dependencies
 
-### Used by
+### Depends on
 
- - [tokbox-loader](../loader-component)
+- [my-component](../my-component)
 
 ### Graph
 ```mermaid
 graph TD;
   tokbox-loader --> my-component
-  style my-component fill:#f9f,stroke:#333,stroke-width:4px
+  style tokbox-loader fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

@@ -122,7 +122,7 @@ export class MyComponent {
               this.handleError(error);
             } else {
               const publisher = OT.initPublisher(this.publisherEl, {
-                insertMode: 'replace',
+                insertMode: 'append',
                 width: '100%',
                 height: '100%'
               }, this.handleError);
@@ -132,7 +132,9 @@ export class MyComponent {
             }
         });
         this.oneToOneSession.on('streamCreated', (event) => {
-          this.oneToOneSession.subscribe(event.stream, this.screenPublishEl, { appendMode: 'append' } as SubscriberProperties);
+          const element = document.createElement('div');
+          this.screenPublishEl.appendChild(element);
+          this.oneToOneSession.subscribe(event.stream, element, { appendMode: 'append' } as SubscriberProperties);
         });
 
         // Process the event.data property, if there is any data.

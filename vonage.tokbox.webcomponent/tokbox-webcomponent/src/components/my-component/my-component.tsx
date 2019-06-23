@@ -68,7 +68,7 @@ export class MyComponent {
   }
 
 
-  componentDidRender() {
+  componentDidLoad() {
       console.log("componentDidLoad");
       console.log("OT supported", OtClient.checkSystemRequirements());
 
@@ -97,18 +97,57 @@ export class MyComponent {
 
   }
 
+  shareScreen () {
+      OT.checkScreenSharingCapability((response) => {
+          console.log('1 =========== response.supported = ', response.supported);
+          console.log('=========== response.extensionRegistered = ', response.extensionRegistered);
+        if(!response.supported || response.extensionRegistered === false) {
+          // This browser does not support screen sharing.
+          console.log(' ===== not support screen sharing');
+        } else if (response.extensionInstalled === false) {
+          // Prompt to install the extension.
+          console.log(' ===== extension needed');
+        } else {
+          // Screen sharing is available. Publish the screen.
+          let publishOptions = {} as any;
+          publishOptions.maxResolution = { width: 1920, height: 1080 };
+          publishOptions.videoSource = 'screen';
+          var screenPublisherElement = document.createElement('div');
+          var publisher = OT.initPublisher('screen-preview',
+          //var publisher = OT.initPublisher(screenPublisherElement,
+            publishOptions,
+            (error) => {
+              if (error) {
+                // Look at error.message to see what went wrong.
+                console.log('=========== error = ', error);
+              } else {
+                this.session.publish(publisher, function(error) {
+                  if (error) {
+                    // Look error.message to see what went wrong.
+                    console.log('1=========== error = ', error);
+                  }
+                });
+              }
+            }
+          );
+        }
+      });
+  }
+
   
   render() {
 
     return <div>We are here!!
-  
       <div id="appVideoContainer" class="App-video-container"></div>
       <div id="videos">
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
+           <div id="screen-preview"></div>
+           <button onClick={this.shareScreen}>Screen Share</button>
+           <div id="sub-screen-sharing-container"></div>
+          <div id="chat"></div>
       </div> 
-      <div id="chat"></div>
-    </div>;
+      </div>
   }
 
 

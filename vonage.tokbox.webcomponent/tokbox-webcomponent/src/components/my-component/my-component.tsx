@@ -6,6 +6,8 @@ import jQuery from 'jquery';
 
 //import a from 'op'
 import OtClient from '@opentok/client'
+
+import ScreenShareAccPack from 'opentok-screen-sharing'
 import AnnotationAccPack from 'opentok-annotation';
 import TextChatAccPack from 'opentok-text-chat';
 import { isParameter } from 'typescript';
@@ -38,9 +40,24 @@ export class MyComponent {
       alert(error.message);
     }
   }
- 
+  
+  initScreenshare() {
+
+  }
+
   initTextChat() {
-    const textChat = new TextChatAccPack(options);
+    const textChatOptions = {
+      session: this.session,
+      sender: {
+        id: 'myCustomIdentifier',
+        alias: 'David',
+      },
+      limitCharacterMessage: 160,
+      controlsContainer: '#feedControls',
+      textChatContainer: '#chatContainer',
+      alwaysOpen: true
+     };
+    const textChat = new TextChatAccPack(textChatOptions);
   }
 
   initAnnotations() {
@@ -53,8 +70,6 @@ export class MyComponent {
 
   componentDidRender() {
       console.log("componentDidLoad");
-      // var webSocket =  WebSocket;
-      // console.log("componentDidLoad", webSocket);
       console.log("OT supported", OtClient.checkSystemRequirements());
 
 
@@ -74,10 +89,11 @@ export class MyComponent {
             this.handleError(error);
           } else {
             this.session.publish(publisher, this.handleError);
+            this.initTextChat();
+
           }
       }
     );
-    this.initTextChat();
 
   }
 
@@ -85,11 +101,7 @@ export class MyComponent {
   render() {
 
     return <div>We are here!!
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>
-      
+  
       <div id="appVideoContainer" class="App-video-container"></div>
       <div id="videos">
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>

@@ -10,7 +10,7 @@ import OtClient from '@opentok/client'
   import ScreenShareAccPack from 'opentok-screen-sharing'
 import AnnotationAccPack from 'opentok-annotation';
 import TextChatAccPack from 'opentok-text-chat';
-import { isParameter } from 'typescript';
+import { isParameter, formatDiagnosticsWithColorAndContext } from 'typescript';
 
 
 const options = {
@@ -140,7 +140,7 @@ export class MyComponent {
     let publishOptions = { 
       session: this.session,
       extensionID: 'plocfffmbcclpdifaikiikgplfnepkpo',
-      annotation: true,
+      annotation: false,
       externalWindow: true,
       dev: true,
       screenProperties: {
@@ -214,7 +214,7 @@ export class MyComponent {
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
           <div ref={el => this.screenShareEl = el as HTMLElement}></div>
-          <button onClick={this.shareScreen}>Screen Share</button>
+          <button onClick={()=>this.shareScreen()}>Screen Share</button>
           <div id="sub-screen-sharing-container"></div>
           <div id="chat"></div>
         </div> 

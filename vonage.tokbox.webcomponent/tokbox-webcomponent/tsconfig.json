@@ -1,24 +1,29 @@
 {
   "compilerOptions": {
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
+    "allowJs": true,
     "declaration": false,
     "experimentalDecorators": true,
     "lib": [
       "dom",
-      "es2017"
+      "es2018"
     ],
+    "noUnusedLocals":false,
     "moduleResolution": "node",
     "module": "esnext",
-    "target": "es2017",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "target": "es2018",
+    "noUnusedParameters": false,
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "h",
+    "skipLibCheck": true
   },
   "include": [
     "src",
-    "types/jsx.d.ts"
+    "types/jsx.d.ts", 
   ],
   "exclude": [
     "node_modules"

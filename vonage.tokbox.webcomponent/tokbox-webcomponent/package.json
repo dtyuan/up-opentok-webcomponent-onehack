@@ -18,7 +18,13 @@
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watchAll"
+    "test.watch": "stencil test --spec --e2e --watchAll",
+    "cp-annotation": "ncp node_modules/opentok-annotation/dist/opentok-annotation.js public/js/components/opentok-annotation.js",
+    "cp-archiving": "ncp node_modules/opentok-archiving/dist/opentok-archiving.js public/js/components/opentok-archiving.js",
+    "cp-screen-sharing": "ncp node_modules/opentok-screen-sharing/dist/opentok-screen-sharing.js public/js/components/opentok-screen-sharing.js",
+    "cp-text-chat": "ncp node_modules/opentok-text-chat/dist/opentok-text-chat.js public/js/components/opentok-text-chat.js",
+    "cp-logging": "ncp node_modules/opentok-solutions-logging/dist/opentok-solutions-logging.js public/js/components/opentok-solutions-logging.js",
+    "cp-core": "ncp node_modules/opentok-accelerator-core/browser/opentok-acc-core.js public/js/components/opentok-acc-core.js"
   },
   "devDependencies": {
     "@stencil/core": "^1.0.7",
@@ -32,14 +38,15 @@
   },
   "license": "MIT",
   "dependencies": {
-    "stencil": "0.0.5", 
     "body-parser": "^1.16.0",
     "express": "^4.14.1",
-    "opentok-accelerator-core": ">=2.0.0",
+    "opentok-accelerator-core": "^2.0.15",
     "opentok-annotation": "*",
+    "opentok-solutions-logging": "*",
     "opentok-archiving": "*",
     "opentok-screen-sharing": ">=1.0.28",
     "opentok-solutions-css": "*",
-    "opentok-text-chat": "*"
+    "opentok-text-chat": "*",
+    "stencil": "0.0.5"
   }
 }

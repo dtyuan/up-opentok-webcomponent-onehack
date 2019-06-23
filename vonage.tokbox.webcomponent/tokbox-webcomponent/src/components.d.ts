@@ -9,7 +9,9 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {}
+  interface MyComponent {
+    'initiateSession': (targetUser: any) => Promise<void>;
+  }
   interface TokboxLoader {}
 }
 

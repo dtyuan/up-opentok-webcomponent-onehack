@@ -1,9 +1,14 @@
 import { Component, Prop, h } from '@stencil/core';
-import OtAnnotation from 'opentok-annotation';
 //import WebSocket from 'sc-ws';
+import jQuery from 'jquery';
+// export for others scripts to use
+
 
 //import a from 'op'
 import OtClient from '@opentok/client'
+import AnnotationAccPack from 'opentok-annotation';
+import TextChatAccPack from 'opentok-text-chat';
+import { isParameter } from 'typescript';
 
 
 const options = {
@@ -21,11 +26,12 @@ const options = {
 })
 export class MyComponent {
 
-  @Prop() test: string;
   subscriberEl: HTMLElement;
   publisherEl: HTMLElement;
 
   session : OtClient.Session;
+
+  annotation: AnnotationAccPack;
 
   handleError(error) {
     if (error) {
@@ -33,9 +39,15 @@ export class MyComponent {
     }
   }
  
+  initTextChat() {
+    const textChat = new TextChatAccPack(options);
+  }
 
   initAnnotations() {
-    //OtAnnotation
+    jQuery.isWindow({});
+    //jQuery("#chat")css();
+    // console.log("initAnnotations");
+    // this.annotation = new AnnotationAccPack({});
   }
 
 
@@ -65,18 +77,25 @@ export class MyComponent {
           }
       }
     );
-    this.initAnnotations();
+    this.initTextChat();
 
   }
 
   
   render() {
 
-    return <div>We are here!! <div id="appVideoContainer" class="App-video-container"></div>
+    return <div>We are here!!
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>
+      
+      <div id="appVideoContainer" class="App-video-container"></div>
       <div id="videos">
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
       </div> 
+      <div id="chat"></div>
     </div>;
   }
 

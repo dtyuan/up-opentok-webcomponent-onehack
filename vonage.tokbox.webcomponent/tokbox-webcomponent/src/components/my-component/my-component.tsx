@@ -1,4 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
+import OtAnnotation from 'opentok-annotation';
 //import WebSocket from 'sc-ws';
 
 //import a from 'op'
@@ -36,16 +37,17 @@ export class MyComponent {
     height: '100%'
   }, this.handleError);
 
+  initAnnotations() {
+    //OtAnnotation
+  }
+
 
   componentDidLoad() {
       console.log("componentDidLoad");
-      var webSocket =  WebSocket;
-      console.log("componentDidLoad", webSocket);
+      // var webSocket =  WebSocket;
+      // console.log("componentDidLoad", webSocket);
       console.log("OT supported", OtClient.checkSystemRequirements());
 
-     
-
-      console.log('session ->');
       this.session = OtClient.initSession(options.credentials.apiKey, options.credentials.sessionId, {}); 
       console.log('init session ->');
       const publisher = this.publisher;
@@ -56,19 +58,14 @@ export class MyComponent {
             this.session.publish(this.publisher, this.handleError);
           }
       }
-      );
+    );
+    this.initAnnotations();
 
-     
   }
 
   
   render() {
-    return <div>We are here!! <div id="appVideoContainer" class="App-video-container"></div>
-      <div id="videos">
-          <div id="subscriber"></div>
-          <div id="publisher"></div>
-      </div> 
-    </div>;
+    return <div>We are here!!</div>;
   }
 
 

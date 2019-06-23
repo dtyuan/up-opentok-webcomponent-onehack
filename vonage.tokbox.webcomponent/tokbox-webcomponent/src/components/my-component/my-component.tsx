@@ -193,7 +193,6 @@ export class MyComponent {
   render() {
     return <div id="appVideoContainer" class="App-video-container">
       <link rel="stylesheet" href="https://assets.tokbox.com/solutions/css/style.css"></link>
-      <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
 
       <button onClick={() => {this.initiateSession('_jmcduffie')}}>Invite</button>
       <div id="videos">

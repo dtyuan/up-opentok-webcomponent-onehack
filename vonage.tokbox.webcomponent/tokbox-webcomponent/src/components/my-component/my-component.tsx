@@ -40,6 +40,8 @@ export class MyComponent {
 
   session : OtClient.Session;
   oneToOneSession : OtClient.Session;
+  annotation: AnnotationAccPack;
+
 
   @Method()
   async initiateSession(targetUser){
@@ -64,7 +66,6 @@ export class MyComponent {
     );
   }
 
-  annotation: AnnotationAccPack;
 
   handleError(error) {
     if (error) {
@@ -89,8 +90,11 @@ export class MyComponent {
     const textChat = new TextChatAccPack(textChatOptions);
   }
 
-  initAnnotations() {
-    this.annotation = new AnnotationAccPack({});
+  startAnnotation() {
+    this.annotation = new AnnotationAccPack({
+      session: this.session,
+      screensharing : true
+    });
     this.annotation.start();
   }
 
@@ -167,6 +171,8 @@ export class MyComponent {
     // publishOptions.videoSource = 'screen';
     var share = new ScreenShareAccPack(publishOptions);
     share.start();
+
+    console.log("share instance", share);
   }
 
   shareScreen () { 
@@ -178,6 +184,7 @@ export class MyComponent {
   render() {
     return <div id="appVideoContainer" class="App-video-container">
       <link rel="stylesheet" href="https://assets.tokbox.com/solutions/css/style.css"></link>
+      <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
 
       <button onClick={() => {this.initiateSession('_jmcduffie')}}>Invite</button>
       <div id="videos">
@@ -186,6 +193,7 @@ export class MyComponent {
           <div ref={el => this.screenShareEl = el as HTMLElement}></div>
           <div ref={el => this.screenPublishEl = el as HTMLElement}></div>
           <button onClick={() => {this.shareScreen();}}>Screen Share</button>
+          <button onClick={() => {this.startAnnotation();}}>Anonotation</button>
           <div id="sub-screen-sharing-container"></div>
           <div id="chatContainer"  ref={el => this.chatEl = el as HTMLElement}></div>
         </div> 

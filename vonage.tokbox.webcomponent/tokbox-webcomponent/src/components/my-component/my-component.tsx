@@ -106,13 +106,6 @@ export class MyComponent {
           if (error) {
             this.handleError(error);
           } else {
-<<<<<<< HEAD
-            this.session.publish(publisher, this.handleError);
-            this.initTextChat();
-          }
-      }
-    );
-=======
             // this.session.publish(publisher, this.handleError);
           }
       });
@@ -139,7 +132,6 @@ export class MyComponent {
 
         // Process the event.data property, if there is any data.
       });
->>>>>>> ac299b1f90f83ba3662ff67a38c691c0574fcc65
 
   }
  
@@ -171,47 +163,10 @@ export class MyComponent {
   }
 
 
-<<<<<<< HEAD
   shareScreen () { 
       console.log("something???",this);
       this.shareScreen2();
       return;
-=======
-  shareScreen () {
-      OT.checkScreenSharingCapability((response) => {
-          console.log('1 =========== response.supported = ', response.supported);
-          console.log('=========== response.extensionRegistered = ', response.extensionRegistered);
-        if(!response.supported || response.extensionRegistered === false) {
-          // This browser does not support screen sharing.
-          console.log(' ===== not support screen sharing');
-        } else if (response.extensionInstalled === false) {
-          // Prompt to install the extension.
-          console.log(' ===== extension needed');
-        } else {
-          // Screen sharing is available. Publish the screen.
-          let publishOptions = {} as any;
-          publishOptions.maxResolution = { width: 1920, height: 1080 };
-          publishOptions.videoSource = 'screen';
-          var screenPublisherElement = document.createElement('div');
-          var publisher = OT.initPublisher(this.screenShareEl,
-            publishOptions,
-            (error) => {
-              if (error) {
-                // Look at error.message to see what went wrong.
-                console.log('=========== error = ', error);
-              } else {
-                this.session.publish(publisher, function(error) {
-                  if (error) {
-                    // Look error.message to see what went wrong.
-                    console.log('1=========== error = ', error);
-                  }
-                });
-              }
-            }
-          );
-        }
-      });
->>>>>>> ac299b1f90f83ba3662ff67a38c691c0574fcc65
   }
       // OT.checkScreenSharingCapability((response) => {
       //     console.log('1 =========== response.supported = ', response.supported);
@@ -258,21 +213,12 @@ export class MyComponent {
       <div id="videos">
           <div ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div ref={el => this.publisherEl = el as HTMLElement}></div>
-<<<<<<< HEAD
-           <div id="screen-preview"></div>
-           <button onClick={()=>this.shareScreen()}>Screen Share</button>
-           {/* <div id="sub-screen-sharing-container"></div> */}
-          <div id="chat"></div>
-      </div> 
-      </div>
-=======
           <div ref={el => this.screenShareEl = el as HTMLElement}></div>
           <button onClick={this.shareScreen}>Screen Share</button>
           <div id="sub-screen-sharing-container"></div>
           <div id="chat"></div>
         </div> 
       </div>;
->>>>>>> ac299b1f90f83ba3662ff67a38c691c0574fcc65
   }
 
 

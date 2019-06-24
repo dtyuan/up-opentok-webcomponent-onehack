@@ -184,7 +184,8 @@
 
   var _handleMessageSent = function (data) {
     _cleanComposer();
-    if (_shouldAppendMessage(data)) {
+    // if (_shouldAppendMessage(data)) {
+    if (false) {
       $('.ots-item-text').last().append(['<span>', data.message, '</span>'].join(''));
       var chatholder = $(_newMessages);
       chatholder[0].scrollTop = chatholder[0].scrollHeight;
@@ -304,8 +305,8 @@
             message: text,
             sentOn: Date.now()
           });
-          if (this.futureMessageNotice) {
-            this.futureMessageNotice = false;
+          if (_this.futureMessageNotice) {
+            _this.futureMessageNotice = false;
           }
         }, function (error) {
           _handleMessageError(error);

@@ -53,15 +53,14 @@ export class MyComponent {
   currentStreamMap = new Map();
 
 
-  @Method()
-  async initiateSession(targetUser){
+  initiateSession(targetUser){
     if(!this.session) {
       throw 'No Session Established'
     }
 
     console.log(targetUser);
 
-
+    this.initTextChat();
     this.session.signal(
       {
         data: JSON.stringify({ sessionIdFor1To1, tokenFor1To1}),
@@ -85,7 +84,6 @@ export class MyComponent {
                 }, this.handleError);
 
                 this.oneToOneSession.publish(publisher, this.handleError);
-                this.initTextChat();
               }
           });
         }
@@ -110,7 +108,7 @@ export class MyComponent {
         alias: this.userName,
       },
       limitCharacterMessage: 160,
-      controlsContainer: this.feedControlsEl,
+      controlsContainer: 'feedControls',
       textChatContainer: this.chatEl,
       alwaysOpen: true
      };

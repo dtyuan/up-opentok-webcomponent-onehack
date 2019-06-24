@@ -50,6 +50,7 @@ export class MyComponent {
   session : OtClient.Session;
   oneToOneSession : OtClient.Session;
   annotation: AnnotationAccPack;
+  currentStreamMap = new Map();
 
 
   @Method()
@@ -167,6 +168,11 @@ export class MyComponent {
           this.oneToOneSession.subscribe(event.stream, element, options);
         } else {
           console.log(event)
+          const alreadyConnected = this.currentStreamMap.has(event.stream.streamId);
+          if (alreadyConnected) {
+            return;
+          }
+          this.currentStreamMap.set(event.stream.streamId, true)
           const element = document.createElement('div');
           this.subscriberEl.appendChild(element);
           this.oneToOneSession.subscribe(event.stream, element, options);

@@ -8,7 +8,7 @@ import jQuery from 'jquery';
 import OtClient, { SubscriberProperties } from '@opentok/client'
 
 import ScreenShareAccPack from 'opentok-screen-sharing'
-import AnnotationAccPack from 'opentok-annotation';
+//import AnnotationAccPack from 'opentok-annotation';
 import TextChatAccPack from 'opentok-text-chat';
 import { isParameter, formatDiagnosticsWithColorAndContext } from 'typescript';
 
@@ -49,7 +49,7 @@ export class MyComponent {
 
   session : OtClient.Session;
   oneToOneSession : OtClient.Session;
-  annotation: AnnotationAccPack;
+  //annotation: AnnotationAccPack;
   currentStreamMap = new Map();
 
 
@@ -116,14 +116,14 @@ export class MyComponent {
   }
 
   startAnnotation() {
-    this.annotation = new AnnotationAccPack({
-      session: this.oneToOneSession,
-      absoluteParent: {
-        publisher: '.App-video-container',
-        subscriber: '.App-video-container'
-      }
-    });
-    this.annotation.start();
+    // this.annotation = new AnnotationAccPack({
+    //   session: this.oneToOneSession,
+    //   absoluteParent: {
+    //     publisher: '.App-video-container',
+    //     subscriber: '.App-video-container'
+    //   }
+    // });
+    // this.annotation.start();
   }
 
   componentDidRender() {

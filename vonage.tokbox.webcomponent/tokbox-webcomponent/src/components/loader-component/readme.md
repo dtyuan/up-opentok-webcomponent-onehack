@@ -5,6 +5,14 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property         | Attribute          | Description | Type     | Default        |
+| ---------------- | ------------------ | ----------- | -------- | -------------- |
+| `targetUserName` | `target-user-name` |             | `string` | `'_dtyuan'`    |
+| `userName`       | `user-name`        |             | `string` | `'_jmcduffie'` |
+
+
 ## Dependencies
 
 ### Depends on

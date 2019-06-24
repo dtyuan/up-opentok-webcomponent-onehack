@@ -5,6 +5,14 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property         | Attribute          | Description | Type     | Default |
+| ---------------- | ------------------ | ----------- | -------- | ------- |
+| `targetUserName` | `target-user-name` |             | `string` | `''`    |
+| `userName`       | `user-name`        |             | `string` | `''`    |
+
+
 ## Methods
 
 ### `initiateSession(targetUser: any) => Promise<void>`

@@ -1,4 +1,4 @@
-import { Component, Prop, h, Method } from '@stencil/core';
+import { Component, Prop, h, Method, State } from '@stencil/core';
 //import WebSocket from 'sc-ws';
 import jQuery from 'jquery';
 // export for others scripts to use
@@ -30,6 +30,14 @@ const tokenFor1To1 = "T1==cGFydG5lcl9pZD00NjM0NzA2MiZzaWc9MzAwYmIyZWVhY2RhOWUyMT
   shadow: true
 })
 export class MyComponent {
+  @Prop()
+  targetUserName: string = '';
+
+  @Prop()
+  userName: string = '';
+
+  @State()
+  connected: boolean = false;
 
   subscriberEl: HTMLElement;
   publisherEl: HTMLElement;
@@ -37,6 +45,7 @@ export class MyComponent {
   screenPublishEl: HTMLElement;
   oneToOnePublisher: HTMLElement;
   chatEl:  HTMLElement;
+  feedControlsEl:  HTMLElement;
 
   session : OtClient.Session;
   oneToOneSession : OtClient.Session;
@@ -49,18 +58,35 @@ export class MyComponent {
       throw 'No Session Established'
     }
 
+    console.log(targetUser);
+
+
     this.session.signal(
       {
         data: JSON.stringify({ sessionIdFor1To1, tokenFor1To1}),
         type: `invite-${targetUser}`
       },
-      function(error) {
+      (error) => {
         if (error) {
           console.log("signal error ("
                        + error.name
                        + "): " + error.message);
         } else {
           console.log("signal sent.");
+          this.oneToOneSession.connect(tokenFor1To1, (error)=>{
+              if (error) {
+                this.handleError(error);
+              } else {
+                const publisher = OT.initPublisher(this.publisherEl, {
+                  insertMode: 'append',
+                  width: '100%',
+                  height: '100%'
+                }, this.handleError);
+
+                this.oneToOneSession.publish(publisher, this.handleError);
+                this.initTextChat();
+              }
+          });
         }
       }
     );
@@ -80,10 +106,10 @@ export class MyComponent {
       session: this.session,
       sender: {
         id: 'myCustomIdentifier',
-        alias: 'David',
+        alias: this.userName,
       },
       limitCharacterMessage: 160,
-      controlsContainer: '#feedControls',
+      controlsContainer: this.feedControlsEl,
       textChatContainer: this.chatEl,
       alwaysOpen: true
      };
@@ -116,43 +142,35 @@ export class MyComponent {
           if (error) {
             this.handleError(error);
           } else {
-            // this.session.publish(publisher, this.handleError);
+            this.connected = true;
           }
       });
 
-      this.session.on("signal:invite-_jmcduffie" as "archiveStarted", (event: any) => {
+      this.oneToOneSession = OtClient.initSession(options.credentials.apiKey, sessionIdFor1To1, {}); 
+      this.session.on(`signal:invite-${this.userName}` as "archiveStarted", (event: any) => {
         console.log("Signal sent from connection " + event.from.id);
         const { sessionIdFor1To1, tokenFor1To1 } = JSON.parse(event.data);
-        this.oneToOneSession = OtClient.initSession(options.credentials.apiKey, sessionIdFor1To1, {}); 
         console.log('init session ->');
         this.oneToOneSession.connect(tokenFor1To1, (error)=>{
             if (error) {
               this.handleError(error);
             } else {
-              const publisher = OT.initPublisher(this.publisherEl, {
-                insertMode: 'append',
-                width: '100%',
-                height: '100%'
-              }, this.handleError);
-
-              this.oneToOneSession.publish(publisher, this.handleError);
-              this.initTextChat();
             }
         });
-        this.oneToOneSession.on('streamCreated', (event) => {
-          const options: SubscriberProperties = { insertMode: 'append', width: '100%', height: '100%' };
-          if(event.stream.videoType === 'screen') {
-            const element = document.createElement('div');
-            this.screenShareEl.appendChild(element);
-            this.oneToOneSession.subscribe(event.stream, element, options);
-          } else {
-            const element = document.createElement('div');
-            this.subscriberEl.appendChild(element);
-            this.oneToOneSession.subscribe(event.stream, element, options);
-          }
-        });
+      });
 
-        // Process the event.data property, if there is any data.
+      this.oneToOneSession.on('streamCreated', (event) => {
+        const options: SubscriberProperties = { insertMode: 'append', width: '100%', height: '100%' };
+        if(event.stream.videoType === 'screen') {
+          const element = document.createElement('div');
+          this.screenShareEl.appendChild(element);
+          this.oneToOneSession.subscribe(event.stream, element, options);
+        } else {
+          console.log(event)
+          const element = document.createElement('div');
+          this.subscriberEl.appendChild(element);
+          this.oneToOneSession.subscribe(event.stream, element, options);
+        }
       });
 
   }
@@ -197,16 +215,20 @@ export class MyComponent {
     return <div id="appVideoContainer" class="App-video-container">
       <link rel="stylesheet" href="https://assets.tokbox.com/solutions/css/style.css"></link>
 
-      <button onClick={() => {this.initiateSession('_jmcduffie')}}>Invite</button>
+      {this.connected ?
+        (<button onClick={() => {this.initiateSession(this.targetUserName)}}>Invite {this.targetUserName}</button>) :
+        (<span>Connecting...</span>)}
+      <button onClick={() => {this.shareScreen();}}>Screen Share</button>
+      <button onClick={() => {this.startAnnotation();}}>Anonotation</button>
+
       <div id="videos">
           <div id="subscriber" ref={el => this.subscriberEl = el as HTMLElement}></div>
           <div id="publisher" ref={el => this.publisherEl = el as HTMLElement}></div>
           <div id="screenShare" ref={el => this.screenShareEl = el as HTMLElement}></div>
           <div id="screenPublish" ref={el => this.screenPublishEl = el as HTMLElement}></div>
-          <button onClick={() => {this.shareScreen();}}>Screen Share</button>
-          <button onClick={() => {this.startAnnotation();}}>Anonotation</button>
           <div id="sub-screen-sharing-container"></div>
           <div id="chatContainer"  ref={el => this.chatEl = el as HTMLElement}></div>
+          <div id="feedControls"  ref={el => this.feedControlsEl = el as HTMLElement}></div>
         </div> 
       </div>;
   }

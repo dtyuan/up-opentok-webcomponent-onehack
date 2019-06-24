@@ -11,8 +11,13 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface MyComponent {
     'initiateSession': (targetUser: any) => Promise<void>;
+    'targetUserName': string;
+    'userName': string;
   }
-  interface TokboxLoader {}
+  interface TokboxLoader {
+    'targetUserName': string;
+    'userName': string;
+  }
 }
 
 declare global {
@@ -36,8 +41,14 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {}
-  interface TokboxLoader extends JSXBase.HTMLAttributes<HTMLTokboxLoaderElement> {}
+  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {
+    'targetUserName'?: string;
+    'userName'?: string;
+  }
+  interface TokboxLoader extends JSXBase.HTMLAttributes<HTMLTokboxLoaderElement> {
+    'targetUserName'?: string;
+    'userName'?: string;
+  }
 
   interface IntrinsicElements {
     'my-component': MyComponent;

@@ -184,7 +184,7 @@
 
   var _handleMessageSent = function (data) {
     _cleanComposer();
-    if (_shouldAppendMessage(data)) {
+    if (false && _shouldAppendMessage(data)) {
     //if (true) {
       $(_this.options.textChatContainer).find('.ots-item-text').last().append(['<span>', data.message, '</span>'].join(''));
       var chatholder = $(_newMessages);
